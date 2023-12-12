@@ -1,0 +1,15 @@
+
+import torch
+from transformers import BertForSequenceClassification, BertTokenizer
+
+text = "This is not a simple text for classification."
+
+model_name = 'bert-base-uncased'
+model = BertForSequenceClassification.from_pretrained(model_name)
+tokenizer = BertTokenizer.from_pretrained(model_name)
+inputs = tokenizer(text, return_tensors='pt')
+outputs = model(**inputs)
+logits = outputs.logits
+predicted_class = torch.argmax(logits, dim=1).item()
+print(f"Predicted class: {predicted_class}")
+# 0 predicted class means negative , 1 predicted class means positive

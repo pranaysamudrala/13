@@ -1,0 +1,23 @@
+
+import numpy as np
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Embedding, SimpleRNN, Dense
+
+# Generate some example data
+num_samples = 1000
+sequence_length = 10
+vocab_size = 10000
+
+X = np.random.randint(vocab_size, size=(num_samples, sequence_length))
+y = np.random.randint(2, size=num_samples)
+
+# Build the RNN model
+model = Sequential()
+model.add(Embedding(vocab_size, 32, input_length=sequence_length))
+model.add(SimpleRNN(64))
+model.add(Dense(1, activation='sigmoid'))
+
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+# Train the model
+model.fit(X, y, epochs=10, batch_size=32, validation_split=0.2)

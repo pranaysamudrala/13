@@ -1,0 +1,16 @@
+
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+from gensim.models import Word2Vec
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+
+corpus = "Alice is sitting on a bench with her sister, and she is really rather bored. Suddenly, a white rabbit passes by, checking his watch and lamenting that he is going to be late."
+
+tokens = word_tokenize(corpus.lower())  
+stop_words = set(stopwords.words('english'))
+filtered_tokens = [word for word in tokens if word.isalnum() and word not in stop_words]
+model = Word2Vec([filtered_tokens], vector_size=100, window=5, min_count=1, workers=4)
+similarity_score = model.wv.similarity('alice', 'rabbit')
+print(f"Similarity score between 'Alice' and 'rabbit': {similarity_score}")

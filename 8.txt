@@ -1,0 +1,11 @@
+
+word_to_num = {
+'zero': '0', 'one': '1', 'two': '2', 'three': '3', 'four': '4',
+'five': '5', 'six': '6', 'seven': '7', 'eight': '8', 'nine': '9'
+}
+# Sample text to be translated
+text_to_translate = "five is greater than three but less than eight."
+# Tokenize the text and replace words with numerical representations
+translated_text = ' '.join(word_to_num.get(word.lower(), word) for word in text_to_translate.split())
+print("Original Text:", text_to_translate)
+print("Translated Text:", translated_text)

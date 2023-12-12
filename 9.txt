@@ -1,0 +1,18 @@
+
+english_to_french = {
+    'hello': 'bonjour',
+    'world': 'monde',
+    'apple': 'pomme',
+    'orange': 'orange',
+    'i like': 'j\'aime',
+    'and': 'et',
+}
+def translate_english_to_french(text):
+    words = text.lower().split()
+    translated_words = [english_to_french.get(word, word) for word in words]
+    return ' '.join(translated_words)
+
+#Example usage
+english_text = "Hello world! I like apples and oranges."
+translated_text = translate_english_to_french(english_text)
+print(f"Translated text: {translated_text}")

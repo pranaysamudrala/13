@@ -1,0 +1,17 @@
+
+#pip install tranformers
+from transformers import BertForSequenceClassification, BertTokenizer
+model_name = 'bert-base-uncased'
+model = BertForSequenceClassification.from_pretrained(model_name)
+tokenizer = BertTokenizer.from_pretrained(model_name)
+def predict_sentiment(review_text):
+    inputs = tokenizer(review_text, return_tensors="pt", padding=True, truncation=True)
+    outputs = model(**inputs)
+    logits = outputs.logits
+    predicted_class = logits.argmax().item()
+    sentiment = "Positive" if predicted_class == 1 else "Negative"
+    return sentiment
+    
+review = "This movie was bored! The acting was superb."
+predicted_sentiment = predict_sentiment(review)
+print(f"Predicted sentiment: {predicted_sentiment}")

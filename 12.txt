@@ -1,0 +1,47 @@
+
+import numpy as np
+import pandas as pd
+import yfinance as yf
+from sklearn.preprocessing import MinMaxScaler
+from keras.models import Sequential
+from keras.layers import SimpleRNN, Dense
+import matplotlib.pyplot as plt
+
+symbol = "AAPL"
+start_date = "2010-01-01"
+end_date = "2022-01-01"
+
+stock_data = yf.download(symbol, start=start_date, end=end_date)
+data = stock_data['Close'].values.reshape(-1, 1)
+scaler = MinMaxScaler(feature_range=(0, 1))
+data_normalized = scaler.fit_transform(data)
+
+sequence_length = 10
+
+X, y = [], []
+for i in range(len(data_normalized) - sequence_length):
+    X.append(data_normalized[i:i+sequence_length])
+    y.append(data_normalized[i+sequence_length])
+
+X, y = np.array(X), np.array(y)
+split_ratio = 0.8
+split_index = int(len(X) * split_ratio)
+
+X_train, X_test = X[:split_index], X[split_index:]
+y_train, y_test = y[:split_index], y[split_index:]
+model = Sequential()
+model.add(SimpleRNN(50, activation='relu', input_shape=(sequence_length, 1)))
+model.add(Dense(1))
+model.compile(optimizer='adam', loss='mean_squared_error')
+model.fit(X_train, y_train, epochs=20, batch_size=32, validation_split=0.1)
+predictions = model.predict(X_test)
+predictions_actual = scaler.inverse_transform(predictions)
+y_test_actual = scaler.inverse_transform(y_test.reshape(-1, 1))
+plt.figure(figsize=(15, 6))
+plt.plot(predictions_actual, label='Predictions')
+plt.plot(y_test_actual, label='Actual')
+plt.title(f'Stock Price Prediction for {symbol}')
+plt.xlabel('Days')
+plt.ylabel('Stock Price')
+plt.legend()
+plt.show()

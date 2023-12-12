@@ -1,0 +1,21 @@
+
+import random
+responses = {
+ "hello": ["Hi!", "Hello!", "Hey there!"],
+ "how are you": ["I'm just a bot, but I'm doing well!", "I'm good, thanks!"],
+ "bye": ["Goodbye!", "See you later!", "Take care!"],
+}
+def get_response(message):
+  message = message.lower()
+  for key in responses:
+    if key in message:
+      return random.choice(responses[key])
+  return "I'm sorry, I don't understand."
+# Chat loop
+while True:
+  user_input = input("You: ")
+  if user_input.lower() == "exit":
+    print("Chatbot: Goodbye!")
+    break
+  response = get_response(user_input)
+  print("Chatbot:", response)

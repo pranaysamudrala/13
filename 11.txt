@@ -1,0 +1,12 @@
+
+from transformers import pipeline
+sentiment_analysis = pipeline("sentiment-analysis")
+def movie_decision(review):
+    sentiment = sentiment_analysis(review)[0]
+    if sentiment['label'] == 'POSITIVE':
+        return "Let's watch this movie!"
+    else:
+        return "Maybe it's better to skip this one."
+user_review = "The movie was amazing"
+decision = movie_decision(user_review)
+print(decision)
